@@ -50,7 +50,7 @@ window.onload = function () {
             }
             row.innerHTML = `
                 <td>${product.name}</td>
-                <td>${product.totalSets}</td>
+                <td>${product.boxcount}</td>
                 <td>${product.price.toFixed(2)}</td>
                 <td>${product.pricePerSet.toFixed(2)}</td>
                 <td><button class="delete-btn" data-index="${index}">削除</button></td>
