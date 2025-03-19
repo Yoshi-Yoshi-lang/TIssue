@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             price: price,
             pricePerSet: pricePerSet
         });
+        saveToLocalStorage();
 
         updateTable();
         form.reset();
