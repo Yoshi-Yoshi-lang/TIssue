@@ -28,7 +28,7 @@ window.onload = function () {
 
         products.push({
             name: productName,
-            totalSets: totalSets,
+            boxCount: boxCount,
             price: price,
             pricePerSet: parseFloat(pricePerSet.toFixed(2))
         });
@@ -50,7 +50,7 @@ window.onload = function () {
             }
             row.innerHTML = `
                 <td>${product.name}</td>
-                <td>${product.boxCount}</td>
+                <td>${product.totalSets}</td>
                 <td>${product.price.toFixed(2)}</td>
                 <td>${product.pricePerSet.toFixed(2)}</td>
                 <td><button class="delete-btn" data-index="${index}">削除</button></td>
