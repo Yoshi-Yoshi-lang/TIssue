@@ -29,8 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateTable();
         form.reset();
     });
-    function saveToLocalStorage() {
-        localStorage.setItem("products", JSON.stringify(products));
 
     function updateTable() {
         // 安い順にソート
@@ -57,4 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
             productList.appendChild(row);
         });
     }
+        function saveToLocalStorage() {
+        localStorage.setItem("products", JSON.stringify(products));
 });
