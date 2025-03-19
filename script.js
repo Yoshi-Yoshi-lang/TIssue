@@ -1,7 +1,7 @@
 window.onload = function () {
     const form = document.getElementById("inputForm");
     const productList = document.getElementById("product-list");
-    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let products = JSON.parse(localStorage.getItem("tissue-products")) || [];
 
     updateTable();
 
@@ -85,6 +85,6 @@ window.onload = function () {
     }
 
     function saveToLocalStorage() {
-        localStorage.setItem("products", JSON.stringify(products));
+        localStorage.setItem("tissue-products", JSON.stringify(products));
     }
 };
