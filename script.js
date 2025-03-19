@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("tissue-form");
     const productList = document.getElementById("product-list");
 
-    let products = [];
+    // ローカルストレージからデータを取得
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    // ページロード時にテーブルを更新
+    updateTable();
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -24,7 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
             price: price,
             pricePerSet: pricePerSet
         });
-        saveToLocalStorage();
+
+        // ローカルストレージに保存
+        localStorage.setItem("products", JSON.stringify(products));
 
         updateTable();
         form.reset();
@@ -42,19 +48,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
         products.forEach(product => {
             const row = document.createElement("tr");
-            // 最安値をハイライト
-            if (product.pricePerSet === minPrice) {
-                row.style.backgroundColor = "#ffeb3b";
-            }
+
             row.innerHTML = `
                 <td>${product.name}</td>
                 <td>${product.setCount}</td>
                 <td>${product.price.toFixed(2)}</td>
                 <td>${product.pricePerSet.toFixed(2)}</td>
             `;
+
             productList.appendChild(row);
         });
+
+        // 最安値のハイライトを適用
+        highlightLowestPrice();
     }
-        function saveToLocalStorage() {
-        localStorage.setItem("products", JSON.stringify(products));
+
+    function highlightLowestPrice() {
+        const rows = productList.getElementsByTagName("tr");
+
+        if (rows.length === 0) return;
+
+        // 最安値の取得（すでにソート済みなので最初の行の値）
+        const minPrice = parseFloat(rows[0].cells[3].textContent);
+
+        // 既存のハイライトを削除
+        Array.from(rows).forEach(row => row.classList.remove("highlight"));
+
+        // 最安値の行にハイライトを適用
+        Array.from(rows).forEach(row => {
+            if (parseFloat(row.cells[3].textContent) === minPrice) {
+                row.classList.add("highlight");
+            }
+        });
+    }
 });
