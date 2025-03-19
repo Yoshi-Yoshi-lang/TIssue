@@ -15,8 +15,24 @@ window.onload = function () {
 
         const productName = document.getElementById("product-name").value.trim();
         const setCount = parseFloat(document.getElementById("set-count").value);
-        const boxCount = parseFloat(document.getElementById("box-count").value);
+        const boxCountElement = document.getElementById("box-count");
+
+        if (!boxCountElement) {
+            console.error("エラー: box-count の入力欄が見つかりません。");
+            return;
+        }
+
+        if (boxCountElement.value === "") {
+            console.error("エラー: box-count の値が空です。");
+            return;
+        }
+
+        const boxCount = parseFloat(boxCountElement.value);
         const price = parseFloat(document.getElementById("price").value);
+
+        console.log("boxCountElement:", boxCountElement);
+        console.log("boxCountElement.value:", boxCountElement.value);
+        console.log("boxCount:", boxCount);
 
         if (!productName || isNaN(setCount) || isNaN(boxCount) || isNaN(price) || setCount <= 0 || boxCount <= 0 || price <= 0) {
             alert("正しい数値を入力してください");
