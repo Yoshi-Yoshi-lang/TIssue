@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ティッシュ比較ツール</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ティッシュ比較ツール</h1>
+        <form id="tissue-form">
+            <input type="text" id="product-name" placeholder="商品名" required>
+            <input type="number" id="set-count" placeholder="セット数" required>
+            <input type="number" id="price" placeholder="価格 (円)" required>
+            <button type="submit">追加</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>商品名</th>
+                    <th>セット数</th>
+                    <th>価格 (円)</th>
+                    <th>1セットあたりの価格 (円)</th>
+                </tr>
+            </thead>
+            <tbody id="product-list"></tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
