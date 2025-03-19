@@ -11,12 +11,21 @@
     <div class="container">
         <h1>ティッシュ比較ツール</h1>
         <form id="inputForm">
+            <label for="product-name">商品名:</label>
             <input type="text" id="product-name" placeholder="商品名" required>
+
+            <label for="set-count">セット数 (1箱あたり):</label>
             <input type="number" id="set-count" placeholder="セット数 (1箱あたり)" required>
+
+            <label for="box-count">箱数:</label>
             <input type="number" id="box-count" placeholder="箱数" required>
+
+            <label for="price">価格 (円):</label>
             <input type="number" id="price" placeholder="価格 (円)" required>
+
             <button type="submit">追加</button>
         </form>
+
         <table>
             <thead>
                 <tr>
