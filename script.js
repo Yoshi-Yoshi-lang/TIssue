@@ -1,77 +1,90 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("tissue-form");
-    const productList = document.getElementById("product-list");
+    const form = document.getElementById("inputForm");
+    const tableBody = document.getElementById("tableBody");
+    const resetBtn = document.getElementById("resetBtn");
+    let products = JSON.parse(localStorage.getItem("products")) || [];
 
-    let products = [];
+    updateTable();
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        const productName = document.getElementById("product-name").value.trim();
-        const setCount = parseFloat(document.getElementById("set-count").value);
+        const productName = document.getElementById("productName").value;
+        const width = document.getElementById("width").value ? parseFloat(document.getElementById("width").value) : null;
+        const length = parseFloat(document.getElementById("length").value);
+        const multiplier = parseFloat(document.getElementById("multiplier").value);
+        const rolls = parseInt(document.getElementById("rolls").value, 10);
         const price = parseFloat(document.getElementById("price").value);
 
-        if (!productName || isNaN(setCount) || isNaN(price) || setCount <= 0 || price <= 0) {
-            alert("正しい数値を入力してください");
+        if (!productName || !length || !multiplier || !rolls || !price) {
+            alert("必須項目をすべて入力してください");
             return;
         }
 
-        const pricePerSet = price / setCount;
+        const effectiveLengthPerRoll = length * multiplier;
+        const totalEffectiveLength = effectiveLengthPerRoll * rolls;
+        const pricePerMeter = (price / totalEffectiveLength).toFixed(2);
 
         products.push({
             name: productName,
-            setCount: setCount,
+            width: width, 
+            length: length,
+            multiplier: multiplier,
+            rolls: rolls,
             price: price,
-            pricePerSet: pricePerSet
+            pricePerMeter: parseFloat(pricePerMeter),
         });
 
+        saveToLocalStorage();
         updateTable();
         form.reset();
     });
 
     function updateTable() {
-        // 安い順にソート
-        products.sort((a, b) => a.pricePerSet - b.pricePerSet);
+        products.sort((a, b) => a.pricePerMeter - b.pricePerMeter);
+        const minPrice = products.length > 0 ? products[0].pricePerMeter : null;
 
-        // テーブルをクリア
-        productList.innerHTML = "";
+        tableBody.innerHTML = "";
 
-        // 最安値を取得
-        const minPrice = products.length > 0 ? products[0].pricePerSet : null;
-
-        products.forEach(product => {
+        products.forEach((product, index) => {
             const row = document.createElement("tr");
+            if (product.pricePerMeter === minPrice) {
+                row.style.backgroundColor = "#ffeb3b";
+            }
 
             row.innerHTML = `
                 <td>${product.name}</td>
-                <td>${product.setCount}</td>
-                <td>${product.price.toFixed(2)}</td>
-                <td>${product.pricePerSet.toFixed(2)}</td>
+                <td>${product.width !== null ? product.width : "-"}</td>
+                <td>${product.length}</td>
+                <td>${product.multiplier}倍</td>
+                <td>${product.rolls}</td>
+                <td>${product.price}</td>
+                <td>${product.pricePerMeter}</td>
+                <td><button class="delete-btn" data-index="${index}">削除</button></td>
             `;
 
-            productList.appendChild(row);
+            tableBody.appendChild(row);
         });
 
-        // 最安値のハイライトを適用
-        highlightLowestPrice();
-    }
-
-    function highlightLowestPrice() {
-        const rows = productList.getElementsByTagName("tr");
-
-        if (rows.length === 0) return;
-
-        // 最安値の取得（すでにソート済みなので最初の行の値）
-        const minPrice = parseFloat(rows[0].cells[3].textContent);
-
-        // 既存のハイライトを削除
-        Array.from(rows).forEach(row => row.classList.remove("highlight"));
-
-        // 最安値の行にハイライトを適用
-        Array.from(rows).forEach(row => {
-            if (parseFloat(row.cells[3].textContent) === minPrice) {
-                row.classList.add("highlight");
-            }
+        document.querySelectorAll(".delete-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+                const index = this.getAttribute("data-index");
+                products.splice(index, 1);
+                saveToLocalStorage();
+                updateTable();
+            });
         });
     }
+
+    function saveToLocalStorage() {
+        localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    resetBtn.addEventListener("click", function () {
+        if (confirm("全てのデータを削除しますか？")) {
+            products = [];
+            saveToLocalStorage();
+            updateTable();
+        }
+    });
 });
