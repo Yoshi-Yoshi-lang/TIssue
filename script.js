@@ -2,11 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("tissue-form");
     const productList = document.getElementById("product-list");
 
-    // ローカルストレージからデータを取得
-    let products = JSON.parse(localStorage.getItem("products")) || [];
-
-    // ページロード時にテーブルを更新
-    updateTable();
+    let products = [];
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -28,9 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
             price: price,
             pricePerSet: pricePerSet
         });
-
-        // ローカルストレージに保存
-        localStorage.setItem("products", JSON.stringify(products));
 
         updateTable();
         form.reset();
